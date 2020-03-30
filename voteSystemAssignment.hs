@@ -1,5 +1,9 @@
 import Debug.Trace
 
+--function that gets the list of candidates
+candidatesList:: [String]
+candidatesList = drop 2 (head dirtyVotes)
+
 --zipCandiates takes in 2 list of strings and maps the name of the candidate
 --in place of the vote preference
 zipCandiates :: [String] -> [String] -> [(String, String)]
@@ -39,6 +43,19 @@ removeBlankVotes xs = [fst x | x <- xs, snd x/="*", snd x/=""]
 --and also removes empty ballots
 cleanVotes :: [[String]]
 cleanVotes =  filter(/=[]) (map (removeBlankVotes) sortVotes)
+
+
+--Take output of cleanVotes ie List of list of candidates in order of pref
+--Return list of tuples, where the candidate is the first element of the tuple,
+--and the list of votes that had them as first pref is the second element
+candidatesFirstPref:: [String] -> (String, [String])
+candidatesFirstPref (x:xs) = (x, xs)
+
+
+applyFirstPref:: [(String, [String])]
+applyFirstPref = map (candidatesFirstPref) cleanVotes
+
+
 
 
 --list of unorganized ballots
